@@ -1,9 +1,51 @@
-<h1>{{ question.question_text }}</h1>
+{% extends 'master.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white shadow-sm border border-gray-200 rounded-xl p-6 mt-10">
 
-<ul>
-{% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
-</ul>
+  <!-- Question Title -->
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">
+    {{ question.question_text }}
+  </h1>
 
-<a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+  <!-- Results -->
+  <div class="space-y-5">
+
+    {% for choice in question.choice_set.all %}
+
+      <div>
+
+        <!-- Choice text + votes -->
+        <div class="flex justify-between items-center mb-1">
+          <span class="text-gray-700 font-medium">
+            {{ choice.choice_text }}
+          </span>
+
+          <span class="text-sm text-gray-500">
+            {{ choice.votes }} vote{{ choice.votes|pluralize }}
+          </span>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+          <div
+            class="bg-indigo-600 h-2 rounded-full transition-all"
+            style="width: {% widthratio choice.votes question.total_votes 100 %}%">
+          </div>
+        </div>
+
+      </div>
+
+    {% endfor %}
+
+  </div>
+
+  <!-- Action -->
+  <div class="mt-8 flex justify-end">
+    <a href="{% url 'polls:detail' question.id %}"
+       class="text-indigo-600 hover:text-indigo-800 font-medium">
+      ← Vote again
+    </a>
+  </div>
+
+</div>
+{% endblock content %}

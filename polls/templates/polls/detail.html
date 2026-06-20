@@ -1,19 +1,65 @@
-<form action="{% url 'polls:vote' question.id %}" method="post">
+{% extends 'master.html' %}
+{% block content %}
+<form action="{% url 'polls:vote' question.id %}" method="post"
+      class="max-w-2xl mx-auto bg-white shadow-sm border border-gray-200 rounded-xl p-6 mt-10">
+
   {% csrf_token %}
+
+  <!-- Question -->
   <fieldset>
-    <legend><h1>{{ question.question_text }}</h1></legend>
+
+    <legend class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">
+        {{ question.question_text }}
+      </h1>
+    </legend>
+
+    <!-- Error Message -->
     {% if error_message %}
-    <p><strong>{{ error_message }}</strong></p>
-    {% endif %} {% for choice in question.choice_set.all %}
-    <input
-      type="radio"
-      name="choice"
-      id="choice{{ forloop.counter }}"
-      value="{{ choice.id }}"
-    />
-    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label
-    ><br />
-    {% endfor %}
+      <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg">
+        <strong>{{ error_message }}</strong>
+      </div>
+    {% endif %}
+
+    <!-- Choices -->
+    <div class="space-y-3">
+
+      {% for choice in question.choice_set.all %}
+
+        <label for="choice{{ forloop.counter }}"
+               class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+
+          <input
+            type="radio"
+            name="choice"
+            id="choice{{ forloop.counter }}"
+            value="{{ choice.id }}"
+            class="accent-indigo-600 w-4 h-4"
+          />
+
+          <span class="text-gray-700">
+            {{ choice.choice_text }}
+          </span>
+
+        </label>
+
+      {% endfor %}
+
+    </div>
+
   </fieldset>
-  <input type="submit" value="Vote" />
+
+  <!-- Submit Button -->
+  <div class="mt-6 flex justify-end">
+
+    <button type="submit"
+            class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition font-medium">
+
+      Vote
+
+    </button>
+
+  </div>
+
 </form>
+{% endblock content %}

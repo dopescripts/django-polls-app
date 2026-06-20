@@ -1,11 +1,60 @@
+{% extends 'master.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-{% if latest_question_list %}
-    <ul>
-    {% for question in latest_question_list %}
-        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
+
+{% block content %}
+
+<div class="min-h-screen bg-gray-50 flex items-start justify-center py-10 px-4">
+
+    <div class="w-full max-w-2xl">
+
+        <!-- Header -->
+        <div class="mb-6 text-center">
+            <h1 class="text-3xl font-bold text-gray-800">Polls</h1>
+            <p class="text-gray-500 mt-1">Choose a question to participate</p>
+        </div>
+
+        {% if latest_question_list %}
+
+            <div class="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
+
+                <ul class="divide-y divide-gray-100">
+
+                    {% for question in latest_question_list %}
+                        <li>
+                            <a href="{% url 'polls:detail' question.id %}"
+                               class="block px-5 py-4 hover:bg-gray-50 transition duration-150">
+
+                                <div class="flex items-center justify-between">
+
+                                    <span class="text-gray-800 font-medium">
+                                        {{ question.question_text }}
+                                    </span>
+
+                                    <span class="text-sm text-gray-400">
+                                        →
+                                    </span>
+
+                                </div>
+
+                            </a>
+                        </li>
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+        {% else %}
+
+            <div class="text-center py-12 bg-white border border-dashed border-gray-300 rounded-xl">
+                <p class="text-gray-500 text-lg">No polls are available</p>
+                <p class="text-sm text-gray-400 mt-1">Check back later for new questions</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock content %}
